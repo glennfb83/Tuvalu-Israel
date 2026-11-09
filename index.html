@@ -1,1 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071b35">
+  <title>Tuvalu × Israel — Island-sized fun</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --navy: #071b35;
+      --deep: #0c2b4d;
+      --blue: #155e9a;
+      --aqua: #56d5cf;
+      --coral: #ff8175;
+      --sun: #ffd166;
+      --cream: #fff7e7;
+      --muted: #b7c8d8;
+      --card: rgba(15, 48, 77, .82);
+      --line: rgba(255,255,255,.13);
+      --shadow: 0 24px 70px rgba(0,0,0,.24);
+      font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--navy);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+    button { font: inherit; }
+    a { color: inherit; }
+    .sky {
+      position: absolute; inset: 0 0 auto; height: 850px; pointer-events: none; overflow: hidden;
+      background: radial-gradient(ellipse at 75% 4%, rgba(52,119,164,.35), transparent 36%),
+                  radial-gradient(ellipse at 5% 35%, rgba(20,104,144,.2), transparent 33%),
+                  linear-gradient(180deg, #081a34 0%, #0c2c4d 70%, #104b6b 100%);
+      z-index: -1;
+    }
+    .sky::before, .sky::after { content:""; position:absolute; border-radius:50%; filter:blur(1px); }
+    .sky::before { width:330px;height:330px;right:13%;top:85px;background:radial-gradient(circle at 34% 35%,#fff4c4 0 2%,#ffd980 4%,#f8ae6d 47%,rgba(248,174,109,.04) 70%);opacity:.9; }
+    .sky::after { width:100%;height:240px;bottom:-80px;left:0;background:linear-gradient(180deg,transparent,rgba(42,176,183,.22)); }
+    .wrap { width:min(1120px, calc(100% - 44px)); margin:auto; }
+    .nav { height:82px; display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2; }
+    .brand { display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:850;letter-spacing:-.04em;font-size:19px; }
+    .brand-mark { width:37px;height:37px;display:grid;place-items:center;background:linear-gradient(135deg,var(--aqua),#73a8ff);border-radius:13px;color:#092341;font-size:19px;box-shadow:0 6px 20px #56d5cf42; }
+    .nav-links { display:flex;gap:28px;align-items:center;font-size:13px;font-weight:700;color:#d9e8f2; }
+    .nav-links a { text-decoration:none;opacity:.85;transition:opacity .2s; }
+    .nav-links a:hover { opacity:1;color:var(--sun); }
+    .pill { border:1px solid #ffffff35;padding:9px 14px;border-radius:99px;background:#ffffff0b; }
+    .hero { min-height:560px;display:grid;grid-template-columns:1.04fr .96fr;align-items:center;gap:35px;padding:45px 0 88px;position:relative; }
+    .eyebrow { color:var(--aqua);font-size:12px;letter-spacing:.17em;font-weight:900;text-transform:uppercase;display:flex;align-items:center;gap:9px; }
+    .eyebrow::before { content:"";width:22px;height:2px;background:var(--aqua); }
+    h1 { font-size:clamp(48px,7vw,80px);line-height:.98;letter-spacing:-.075em;margin:19px 0 22px;max-width:620px; }
+    h1 .amp { color:var(--sun);font-weight:500; }
+    .hero-copy { max-width:475px;color:#c0d0df;font-size:17px;line-height:1.75;margin:0 0 29px; }
+    .actions { display:flex;align-items:center;gap:14px;flex-wrap:wrap; }
+    .button { border:0;border-radius:14px;padding:14px 19px;font-weight:850;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .18s,filter .18s; }
+    .button:hover { transform:translateY(-2px);filter:brightness(1.07); }
+    .button:focus-visible, button:focus-visible, a:focus-visible { outline:3px solid var(--sun);outline-offset:3px; }
+    .button-primary { background:var(--sun);color:#182a3b;box-shadow:0 10px 24px #ffd1662a; }
+    .button-quiet { color:#fff;background:#ffffff12;border:1px solid #ffffff24; }
+    .art { position:relative;min-height:360px;display:grid;place-items:center; }
+    .orbit { position:absolute;width:min(410px,90%);aspect-ratio:1;border:1px dashed #ffffff47;border-radius:50%;transform:rotate(-16deg); }
+    .orbit::before,.orbit::after { content:"✦";position:absolute;color:var(--sun);font-size:18px; }
+    .orbit::before { top:15%;left:10%; }.orbit::after { right:5%;bottom:22%;color:var(--aqua); }
+    .island { width:310px;height:200px;position:relative;display:grid;place-items:center; }
+    .island .palm { font-size:105px;position:absolute;top:-35px;left:42px;transform:rotate(-7deg);filter:drop-shadow(0 10px 8px #08233c66); }
+    .island .wave { position:absolute;bottom:0;font-size:165px;line-height:.8;filter:drop-shadow(0 15px 0 #087ca0); }
+    .island .sand { position:absolute;width:185px;height:48px;bottom:14px;border-radius:50%;background:linear-gradient(180deg,#fff1ad,#e7a969);box-shadow:0 14px 20px #06192e75; }
+    .island .palm,.island .wave,.island .sand { user-select:none; }
+    .float-note { position:absolute;padding:12px 15px;background:#0b2948dc;border:1px solid #ffffff2d;border-radius:14px;box-shadow:var(--shadow);font-size:12px;font-weight:750;backdrop-filter:blur(8px); }
+    .float-note strong { color:var(--sun);display:block;font-size:17px;margin-bottom:3px; }
+    .note-one { left:0;top:50px;transform:rotate(-5deg); }.note-two { right:-4px;bottom:48px;transform:rotate(5deg); }
+    .flag-row { display:flex;gap:8px;margin-top:27px;align-items:center;color:#cad8e5;font-size:12px;font-weight:700; }
+    .flag { width:31px;height:20px;border-radius:4px;box-shadow:0 2px 6px #0005;position:relative;overflow:hidden; }
+    .flag.tv { background:#5aa9e6; }.flag.tv::before { content:"✦";position:absolute;color:#ffd166;right:4px;top:2px;font-size:9px; }
+    .flag.il { background:linear-gradient(#fff 0 28%,#4a8fcb 28% 42%,#fff 42% 58%,#4a8fcb 58% 72%,#fff 72%); }
+    .flag.il::after { content:"✡";position:absolute;color:#4a8fcb;font-size:11px;top:3px;left:11px;line-height:1; }
+    .section { padding:55px 0 80px;position:relative; }
+    .section-heading { display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:25px; }
+    .kicker { color:var(--aqua);font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:900; }
+    h2 { font-size:clamp(30px,4vw,43px);letter-spacing:-.055em;line-height:1.1;margin:9px 0 0; }
+    .section-heading p { max-width:350px;color:var(--muted);font-size:14px;line-height:1.65;margin:0; }
+    .games { display:grid;grid-template-columns:repeat(3,1fr);gap:16px; }
+    .game-card { min-height:245px;background:linear-gradient(145deg,rgba(22,67,103,.92),rgba(12,40,68,.93));border:1px solid var(--line);border-radius:22px;padding:22px;position:relative;overflow:hidden;box-shadow:0 14px 35px #06172a35;transition:transform .22s,border-color .22s; }
+    .game-card:hover { transform:translateY(-5px);border-color:#56d5cf88; }
+    .game-icon { width:56px;height:56px;border-radius:17px;display:grid;place-items:center;font-size:28px;background:#ffffff12;margin-bottom:25px; }
+    .game-card:nth-child(1) .game-icon { background:#56d5cf20; }.game-card:nth-child(2) .game-icon { background:#ffd16620; }.game-card:nth-child(3) .game-icon { background:#ff817520; }
+    .game-card h3 { margin:0 0 8px;font-size:19px;letter-spacing:-.03em; }
+    .game-card p { color:var(--muted);font-size:13px;line-height:1.55;margin:0;max-width:280px; }
+    .play-link { position:absolute;bottom:21px;right:21px;width:38px;height:38px;border:1px solid #ffffff35;border-radius:50%;color:var(--cream);background:#ffffff0b;cursor:pointer;font-size:17px;transition:background .2s; }
+    .play-link:hover { background:var(--aqua);color:#08243d; }
+    .game-stage { margin-top:22px;display:none;background:linear-gradient(145deg,#123b5e,#0c2947);border:1px solid #ffffff24;border-radius:24px;padding:clamp(20px,4vw,35px);min-height:260px;box-shadow:var(--shadow); }
+    .game-stage.active { display:block;animation:rise .35s ease-out; }
+    @keyframes rise { from { opacity:0;transform:translateY(10px); } to { opacity:1;transform:translateY(0); } }
+    .stage-top { display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px; }
+    .stage-top h3 { margin:0;font-size:23px;letter-spacing:-.04em; }
+    .close-game { border:1px solid #ffffff33;background:#ffffff0d;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer; }
+    .quiz-question { font-size:clamp(19px,3vw,26px);font-weight:800;margin:20px 0;letter-spacing:-.03em; }
+    .quiz-options { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:740px; }
+    .quiz-option { text-align:left;padding:14px 16px;border:1px solid #ffffff2b;border-radius:13px;background:#ffffff0a;color:var(--cream);cursor:pointer;font-weight:700; }
+    .quiz-option:hover:not(:disabled) { border-color:var(--aqua);background:#56d5cf15; }
+    .quiz-option.correct { border-color:#65dfae;background:#65dfae22; }.quiz-option.wrong { border-color:var(--coral);background:#ff817522; }
+    .feedback { min-height:28px;margin:15px 0 0;color:var(--aqua);font-weight:750; }
+    .score-line { color:var(--muted);font-size:13px;margin-top:7px; }
+    .memory-grid { display:grid;grid-template-columns:repeat(4,minmax(60px,100px));gap:10px;justify-content:center;margin:15px auto; }
+    .memory-card { aspect-ratio:1;border:1px solid #ffffff30;border-radius:15px;background:linear-gradient(140deg,#1d6590,#18456c);color:transparent;font-size:30px;cursor:pointer;transition:transform .18s,background .18s; }
+    .memory-card:hover:not(.matched) { transform:scale(1.04); }.memory-card.revealed,.memory-card.matched { color:var(--cream);background:#ffffff17; }.memory-card.matched { border-color:var(--aqua); }
+    .memory-status { text-align:center;color:var(--muted);font-size:14px;min-height:22px; }
+    .hop-area { height:245px;position:relative;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#73cde1 0 57%,#138caf 57% 100%);border:1px solid #ffffff24; }
+    .hop-area::after { content:"〰 〰 〰 〰 〰 〰 〰 〰 〰";position:absolute;left:0;right:0;top:60%;white-space:nowrap;color:#b5eff0aa;font-size:25px;letter-spacing:7px; }
+    .hop-target { position:absolute;z-index:1;border:0;background:transparent;font-size:42px;cursor:pointer;transition:left .2s,top .2s;filter:drop-shadow(0 4px 3px #153d4e66); }
+    .hop-player { position:absolute;z-index:2;left:12%;bottom:29px;font-size:42px;transition:left .22s; }
+    .hop-hud { display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0 0;color:#d9e8f2;font-size:13px; }
+    .about { display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch;margin-top:10px; }
+    .about-card { border-radius:22px;padding:25px;background:#ffffff09;border:1px solid var(--line); }
+    .about-card h3 { margin:0 0 10px;font-size:18px; }.about-card p { color:var(--muted);font-size:14px;line-height:1.7;margin:0; }
+    .fact { display:flex;gap:14px;align-items:flex-start; }.fact-icon { font-size:24px; }.fact strong { color:var(--sun); }
+    footer { border-top:1px solid #ffffff1a;padding:25px 0 35px;color:#91a9bc;font-size:12px;display:flex;justify-content:space-between;gap:20px; }
+    footer span:last-child { color:#b3c5d3; }
+    @media (max-width:760px) {
+      .wrap { width:min(100% - 32px,560px); }.nav { height:70px; }.nav-links { gap:14px;font-size:12px; }.nav-links a:nth-child(1) { display:none; }
+      .hero { grid-template-columns:1fr;gap:0;padding:55px 0 60px; }.hero-copy { font-size:15px; }.art { min-height:300px; }.island { transform:scale(.88); }.orbit { width:300px; }.note-one { left:4%; }.note-two { right:2%; }
+      .section { padding:38px 0 60px; }.section-heading { display:block; }.section-heading p { margin-top:12px; }.games { grid-template-columns:1fr; }.game-card { min-height:205px; }.game-icon { margin-bottom:18px; }.about { grid-template-columns:1fr; }.quiz-options { grid-template-columns:1fr; }
+      footer { flex-direction:column;gap:7px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+  <header class="wrap nav">
+    <a class="brand" href="#home" aria-label="Tuvalu and Israel home"><span class="brand-mark">✦</span><span>Tuvalu <span style="color:var(--sun)">×</span> Israel</span></a>
+    <nav class="nav-links" aria-label="Main navigation"><a href="#games">Games</a><a href="#discover">Discover</a><a class="pill" href="#games">Let’s play&nbsp; ↗</a></nav>
+  </header>
+  <main>
+    <section class="wrap hero" id="home">
+      <div>
+        <div class="eyebrow">A little place for a big connection</div>
+        <h1>Small islands.<br><span class="amp">Big</span> connection.</h1>
+        <p class="hero-copy">A sunny little corner celebrating Tuvalu and Israel. Explore, learn a few things, and take a break for some island-sized fun.</p>
+        <div class="actions"><a class="button button-primary" href="#games">Play a game <span aria-hidden="true">→</span></a><a class="button button-quiet" href="#discover">Explore the story</a></div>
+        <div class="flag-row"><span class="flag tv" aria-label="Tuvalu-inspired flag"></span><span>Tuvalu</span><span style="color:var(--sun)">+</span><span class="flag il" aria-label="Israel-inspired flag"></span><span>Israel</span></div>
+      </div>
+      <div class="art" aria-label="Illustration of a sunny tropical island">
+        <div class="orbit"></div><div class="float-note note-one"><strong>🌊 9 islands</strong>in the Pacific</div>
+        <div class="island"><span class="palm" aria-hidden="true">🌴</span><span class="wave" aria-hidden="true">🌊</span><span class="sand" aria-hidden="true"></span></div>
+        <div class="float-note note-two"><strong>✡ Shalom!</strong>Peace &amp; welcome</div>
+      </div>
+    </section>
 
+    <section class="wrap section" id="games">
+      <div class="section-heading"><div><div class="kicker">Pick your adventure</div><h2>Play a little. Learn a lot.</h2></div><p>Three quick games, zero downloads. Pick one and see how many points you can collect!</p></div>
+      <div class="games">
+        <article class="game-card"><div class="game-icon" aria-hidden="true">🧠</div><h3>Island Quiz</h3><p>Test your knowledge about the islands, flags, and places in between.</p><button class="play-link" type="button" data-game="quiz" aria-label="Play Island Quiz">↗</button></article>
+        <article class="game-card"><div class="game-icon" aria-hidden="true">🃏</div><h3>Memory Match</h3><p>Flip the cards and find all the matching pairs. How quick are you?</p><button class="play-link" type="button" data-game="memory" aria-label="Play Memory Match">↗</button></article>
+        <article class="game-card"><div class="game-icon" aria-hidden="true">🏝️</div><h3>Reef Runner</h3><p>Hop across the lagoon and catch the floating stars. Ready, captain?</p><button class="play-link" type="button" data-game="hop" aria-label="Play Reef Runner">↗</button></article>
+      </div>
+      <div class="game-stage" id="game-stage" aria-live="polite"></div>
+    </section>
+
+    <section class="wrap section" id="discover" style="padding-top:10px">
+      <div class="section-heading"><div><div class="kicker">Two places, one curious world</div><h2>A little more to discover.</h2></div></div>
+      <div class="about">
+        <article class="about-card fact"><span class="fact-icon" aria-hidden="true">🌴</span><div><h3>Pacific-sized wonder</h3><p>Tuvalu is a Polynesian island country in the Pacific Ocean, made up of nine islands. Its capital is Funafuti, a lively atoll surrounded by blue lagoon waters.</p></div></article>
+        <article class="about-card fact"><span class="fact-icon" aria-hidden="true">🌅</span><div><h3>From the Mediterranean to the desert</h3><p>Israel sits at the meeting point of the Mediterranean and the Middle East, with landscapes ranging from beaches and green hills to the Negev Desert.</p></div></article>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap"><span>Made with ☀️ and a little island spirit.</span><span>A playful learning project · Explore with curiosity and kindness</span></footer>
+
+  <script>
+    (() => {
+      const stage = document.getElementById('game-stage');
+      const quizQuestions = [
+        { q: 'Tuvalu is located in which ocean?', options: ['Atlantic Ocean', 'Pacific Ocean', 'Indian Ocean', 'Arctic Ocean'], answer: 1 },
+        { q: 'What is the capital of Israel?', options: ['Jerusalem', 'Haifa', 'Eilat', 'Tel Aviv'], answer: 0 },
+        { q: 'How many islands make up Tuvalu?', options: ['Five', 'Seven', 'Nine', 'Twelve'], answer: 2 },
+        { q: 'Which of these is a famous sea along Israel’s coast?', options: ['Baltic Sea', 'Red Sea', 'Black Sea', 'Mediterranean Sea'], answer: 3 },
+        { q: 'What is the capital atoll of Tuvalu?', options: ['Funafuti', 'Nukufetau', 'Nanumea', 'Vaitupu'], answer: 0 }
+      ];
+      const symbols = ['🌴', '🌊', '☀️', '🐚', '⭐', '🪸'];
+      let quizIndex = 0, quizScore = 0, memoryOpen = [], memoryLocked = false, moves = 0, hopScore = 0, hopTimer = null;
+
+      function showStage(title, contents) {
+        stage.innerHTML = `<div class="stage-top"><h3>${title}</h3><button class="close-game" type="button">Close ✕</button></div>${contents}`;
+        stage.classList.add('active');
+        stage.querySelector('.close-game').addEventListener('click', closeStage);
+        stage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      function closeStage() {
+        stage.classList.remove('active');
+        if (hopTimer) { clearInterval(hopTimer); hopTimer = null; }
+      }
+      function startQuiz() {
+        quizIndex = 0; quizScore = 0; renderQuestion();
+      }
+      function renderQuestion() {
+        if (quizIndex >= quizQuestions.length) {
+          showStage('Island Quiz · All done!', `<p class="quiz-question">${quizScore === quizQuestions.length ? '🌟 Perfect score!' : '🎉 Nice exploring!'}</p><p class="feedback">You got ${quizScore} out of ${quizQuestions.length} correct.</p><button class="button button-primary" id="quiz-again" type="button">Play again</button>`);
+          stage.querySelector('#quiz-again').addEventListener('click', startQuiz); return;
+        }
+        const item = quizQuestions[quizIndex];
+        showStage('Island Quiz', `<div class="score-line">Question ${quizIndex + 1} of ${quizQuestions.length} · Score: ${quizScore}</div><div class="quiz-question">${item.q}</div><div class="quiz-options">${item.options.map((option, i) => `<button class="quiz-option" type="button" data-answer="${i}">${option}</button>`).join('')}</div><div class="feedback" id="quiz-feedback" aria-live="polite"></div>`);
+        stage.querySelectorAll('.quiz-option').forEach(button => button.addEventListener('click', () => {
+          const picked = Number(button.dataset.answer);
+          stage.querySelectorAll('.quiz-option').forEach(option => { option.disabled = true; if (Number(option.dataset.answer) === item.answer) option.classList.add('correct'); });
+          if (picked === item.answer) { quizScore++; stage.querySelector('#quiz-feedback').textContent = 'That’s right! Great job. ✨'; }
+          else { button.classList.add('wrong'); stage.querySelector('#quiz-feedback').textContent = `Not quite — the answer is ${item.options[item.answer]}. Keep going!`; }
+          const next = document.createElement('button'); next.className = 'button button-primary'; next.style.marginTop = '12px'; next.textContent = quizIndex === quizQuestions.length - 1 ? 'See my score' : 'Next question →'; next.addEventListener('click', () => { quizIndex++; renderQuestion(); }); stage.append(next);
+        }));
+      }
+      function startMemory() {
+        moves = 0; memoryOpen = []; memoryLocked = false;
+        const deck = [...symbols, ...symbols].map((symbol, i) => ({ symbol, id: i })).sort(() => Math.random() - .5);
+        showStage('Memory Match', `<p class="memory-status" id="memory-status">Find all 6 matching pairs. Take your time!</p><div class="memory-grid">${deck.map(card => `<button class="memory-card" type="button" aria-label="Hidden card" data-symbol="${card.symbol}" data-id="${card.id}">?</button>`).join('')}</div><p class="memory-status" id="memory-moves">Moves: 0</p>`);
+        stage.querySelectorAll('.memory-card').forEach(card => card.addEventListener('click', () => {
+          if (memoryLocked || card.classList.contains('revealed') || card.classList.contains('matched')) return;
+          card.textContent = card.dataset.symbol; card.setAttribute('aria-label', card.dataset.symbol); card.classList.add('revealed'); memoryOpen.push(card);
+          if (memoryOpen.length === 2) {
+            moves++; stage.querySelector('#memory-moves').textContent = `Moves: ${moves}`;
+            if (memoryOpen[0].dataset.symbol === memoryOpen[1].dataset.symbol) {
+              memoryOpen.forEach(c => { c.classList.remove('revealed'); c.classList.add('matched'); }); memoryOpen = [];
+              if (stage.querySelectorAll('.memory-card.matched').length === 12) stage.querySelector('#memory-status').textContent = `You found every pair in ${moves} moves! 🎉`;
+            } else {
+              memoryLocked = true; setTimeout(() => { memoryOpen.forEach(c => { c.classList.remove('revealed'); c.textContent = '?'; c.setAttribute('aria-label', 'Hidden card'); }); memoryOpen = []; memoryLocked = false; }, 750);
+            }
+          }
+        }));
+      }
+      function startHop() {
+        hopScore = 0;
+        showStage('Reef Runner', `<p class="memory-status">Click the ⭐ as it drifts around the lagoon to collect points!</p><div class="hop-area" id="hop-area"><span class="hop-player" aria-hidden="true">🛶</span><button class="hop-target" id="hop-target" type="button" aria-label="Catch the star">⭐</button></div><div class="hop-hud"><span id="hop-score">Stars: 0</span><span id="hop-time">Time: 20</span></div>`);
+        const area = stage.querySelector('#hop-area'), target = stage.querySelector('#hop-target');
+        const moveTarget = () => { const maxX = Math.max(12, area.clientWidth - 60), maxY = Math.max(20, area.clientHeight - 80); target.style.left = `${Math.random() * maxX}px`; target.style.top = `${Math.random() * maxY}px`; };
+        moveTarget(); target.addEventListener('click', () => { hopScore++; stage.querySelector('#hop-score').textContent = `Stars: ${hopScore}`; moveTarget(); });
+        let time = 20; hopTimer = setInterval(() => {
+          time--; const timeNode = stage.querySelector('#hop-time');
+          if (!timeNode) { clearInterval(hopTimer); hopTimer = null; return; }
+          timeNode.textContent = `Time: ${time}`;
+          if (time <= 0) { clearInterval(hopTimer); hopTimer = null; target.disabled = true; stage.querySelector('.memory-status').textContent = `Time’s up! You caught ${hopScore} ${hopScore === 1 ? 'star' : 'stars'}! ⭐`; }
+        }, 1000);
+      }
+      document.querySelectorAll('[data-game]').forEach(button => button.addEventListener('click', () => {
+        if (hopTimer) { clearInterval(hopTimer); hopTimer = null; }
+        if (button.dataset.game === 'quiz') startQuiz();
+        else if (button.dataset.game === 'memory') startMemory();
+        else startHop();
+      }));
+    })();
+  </script>
+</body>
+</html>
